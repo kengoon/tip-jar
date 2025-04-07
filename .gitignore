@@ -1,0 +1,4 @@
+/.venv/
+/.idea/
+/.run/
+main.py.orig
