@@ -1,0 +1,149 @@
+<HomeScreen>:
+    name: "home screen"
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            size_hint_y: None
+            height: self.minimum_height
+            padding: "10dp"
+            CustomLabel:
+                text: "Tip Jar"
+                font_size: "22sp"
+                bold: True
+                halign: "center"
+                adaptive_height: True
+                pos_hint: {"center_y": .5}
+        CustomBoxLayout:
+            padding: "15dp"
+            CustomBoxLayout:
+                adaptive_height: True
+                padding: "20dp"
+                spacing: "20dp"
+                pos_hint: {"center_y": .6}
+                orientation: "vertical"
+                canvas:
+                    Color:
+                        rgba: app.theme_cls.bg_color
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                        radius: [dp(20)]
+                canvas.before:
+                    Color:
+                        rgba: app.theme_cls.shadow_color
+                    BoxShadow:
+                        pos: self.pos
+                        size: self.size
+                        offset: 0, 0
+                        spread_radius: -dp(15), -dp(15)
+                        blur_radius: dp(20)
+                        border_radius: [dp(10)] * 4
+                CustomLabel:
+                    adaptive_height: True
+                    bold: True
+                    text: "Buy Now in Kivy a cup of coffee"
+                    font_size: "24sp"
+                    line_height: 1.28
+                CustomBoxLayout:
+                    adaptive_height: True
+                    padding: "10dp", "20dp"
+                    spacing: "10dp"
+                    canvas:
+                        Color:
+                            rgba: app.theme_cls.primary_color[:3] + [.7]
+                        SmoothLine:
+                            width: 1
+                            rounded_rectangle: [*self.pos, *self.size, dp(15)]
+                        Color:
+                            rgba: app.theme_cls.primary_color[:3] + [.05]
+                        SmoothRoundedRectangle:
+                            radius: [dp(15)]
+                            size: self.size
+                            pos: self.pos
+                    CoverImage:
+                        source: "assets/images/coffee.png"
+                        size_hint: None, None
+                        size: "40dp", "40dp"
+                        pos_hint: {"center_y": .6}
+                    CustomLabel:
+                        text: "x"
+                        adaptive_size: True
+                        bold: True
+                        font_size: "23sp"
+                        color: app.theme_cls.disabled_color
+                        pos_hint: {"center_y": .5}
+                    TipButton:
+                        id: tip_1
+                        tip: "1"
+                        state: "down"
+                        product_id: "inapp_1" if not checkbox.active else "buy_now_in_kivy_1"
+                        on_release:
+                            btn.price = 1
+                            btn.product_id = self.product_id
+                            btn.tip = self
+                    TipButton:
+                        tip: "5"
+                        product_id: "inapp_5" if not checkbox.active else "buy_now_in_kivy_5"
+                        on_release:
+                            btn.price = 5
+                            btn.product_id = self.product_id
+                            btn.tip = self
+                    TipButton:
+                        tip: "10"
+                        product_id: "inapp_10" if not checkbox.active else "buy_now_in_kivy_10"
+                        on_release:
+                            btn.price = 10
+                            btn.product_id = self.product_id
+                            btn.tip = self
+                    TipButton:
+                        tip: "100"
+                        product_id: "inapp_100" if not checkbox.active else "buy_now_in_kivy_100"
+                        on_release:
+                            btn.price = 100
+                            btn.product_id = self.product_id
+                            btn.tip = self
+                CustomBoxLayout:
+                    size_hint_y: None
+                    height: "40dp"
+                    CustomCheckBox:
+                        id: checkbox
+                    CustomLabel:
+                        text: "Make this monthly"
+                        font_size: "14sp"
+                CustomButton:
+                    id: btn
+                    tip: tip_1
+                    price: 1
+                    size_hint_y: None
+                    height: "45dp"
+                    radius: self.height / 2
+                    text: "Support ${}".format(self.price)
+                    bold: True
+                    on_release: root.support(self.tip.product_id, checkbox.active)
+
+
+<TipButton@ToggleButtonBehavior+CustomBoxLayout>:
+    size_hint: None, None
+    size: "40dp", "40dp"
+    group: "tip"
+    tip: ""
+    allow_no_selection: False
+    line_color: app.theme_cls.primary_color[:3] + [.7]
+    canvas:
+        Color:
+            rgba: app.theme_cls.primary_color[:3] + [.7]
+        SmoothLine:
+            width: 1
+            rounded_rectangle: [*self.pos, *self.size, dp(10)]
+        Color:
+            rgba: app.theme_cls.transparent_color if self.state == "normal" else app.theme_cls.primary_color
+        SmoothRoundedRectangle:
+            radius: [dp(10)]
+            size: self.size
+            pos: self.pos
+    CustomLabel:
+        text: root.tip
+        bold: True
+        font_size: "18sp"
+        halign: "center"
+        color: app.theme_cls.text_color if root.state == "normal" else "white"
